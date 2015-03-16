@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/knockout-3.2.0.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css" />
+    <title>Matrix</title>
+</head>
+<body>
+    <div class="container">
+        <div class="buttons">
+            <button data-bind="click: function() {$root.next(1);}">Next</button>
+            <button data-bind="click: function() {$root.next(20);}">Next [20]</button>
+            <button data-bind="click: function() {$root.next(50);}">Next [50]</button>
+            <button data-bind="click: function() {$root.next(200);}">Next [200]</button>
+            <button data-bind="click: function() {$root.next(5000);}">Next [5000]</button>
+        </div>
+        <div class="counters">
+            <span class="counter">current: <span data-bind="text: current"></span></span>
+            <span class="counter">total: <span data-bind="text: totalCount"></span></span>
+        </div>
+
+    <table width="100%">
+        <tr>
+            <td>
+                <table class="matrix" data-bind="foreach: matrix">
+                    <tr data-bind="foreach: $data">
+                        <td data-bind="text: $data"></td>
+                    </tr>
+                </table>
+
+
+                <table class="vecttable" data-bind="foreach: occurrence">
+                    <tr><td data-bind="text: $index()+1"></td><td data-bind="text: occurrence"></td><td data-bind="text: distribution"></td></tr>
+                </table>
+            </td>
+            <td class="right" align="right">
+                <table style="float: right">
+                    <tr>
+                        <td>
+                            <table class="matrix" data-bind="foreach: matrix">
+                                <tr data-bind="foreach: $data">
+                                    <td data-bind="text: $data"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td><span class="bull">&#x25cf;</span></td>
+                        <td>
+                            <table class="matrix" data-bind="foreach: occurrence">
+                                <tr>
+                                    <td data-bind="text: distribution"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td><span class="smallsign">=</span></td>
+                        <td><span class="sign">?</span></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+        <textarea class="editmatrix" data-bind="value: editmatrix"></textarea><br />
+        <button data-bind="click: readMatrix">Update</button>
+    </div>
+</body>
+</html>
