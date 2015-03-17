@@ -9,16 +9,16 @@ var matrixTemplates = [
         [0.3, 0.5, 0.2],
         [0.6, 0.2, 0.2]
     ]
+]; // Need to update
 
-];
-function OccurrenceModel(v, total) {
+function OccurrenceModel(initialValue, total) {
     var self = this;
-    self.total = total;
-    self.occurrence = ko.observable(v);
+    self.total = total; // total is observable of total iteration count
+    self.occurrence = ko.observable(initialValue);
     self.distribution = ko.computed(function() {
         var total = ko.unwrap(self.total);
         if(total==0) return 0;
-        return (ko.unwrap(self.occurrence)/total).toFixed(3);
+        return (ko.unwrap(self.occurrence)/total).toFixed(3); // return rounded value
     }, self);
 }
 
@@ -53,32 +53,33 @@ var ViewModel = function() {
 
     self.initMatrix(matrixTemplates[0]);
 
-    var calculateNext = function() {
-        var r = Math.random();
+
+    // calculate next row if now we in current
+    var calculateNext = function(currentLine) {
+        var randomFloat = Math.random();
         var matrix = self.matrix();
         var dimension = matrix.length;
-        var currentLine = self.current()-1;
-        var t=0;
+
+        var partialSum=0;
         for(var i=0; i<dimension; i++) {
-            t+=parseFloat(matrix[currentLine][i]);
-            if(r <= t) {
-                return i+1;
+            partialSum+=parseFloat(matrix[currentLine][i]);
+            if(randomFloat <= partialSum) {
+                return i;
             }
         }
-        console.log("error 1");
+
     };
 
     self.next = function(cnt) {
-        if(cnt!=undefined) {
-            for(var i=0; i<cnt; i++)
-                self.next();
-            return;
+        if(cnt==undefined) cnt=1;
+        var currentLine = self.current()-1;
+        for(var i=0; i<cnt; i++) {
+            currentLine = calculateNext(currentLine);
+            var t = self.occurrence()[currentLine].occurrence;
+            t(ko.unwrap(t)+1);
         }
-        var n = calculateNext();
-        self.totalCount(ko.unwrap(self.totalCount)+1);
-        var t = self.occurrence()[n-1].occurrence;
-        t(ko.unwrap(t)+1);
-        self.current(n);
+        self.current(currentLine+1);
+        self.totalCount(ko.unwrap(self.totalCount)+cnt);
     };
 
     self.readMatrix = function() {
