@@ -44,7 +44,7 @@ var ViewModel = function() {
         }
 
         var tedit = [];
-        for(var i=0; i<dimension; i++) {
+        for(i=0; i<dimension; i++) {
             tedit.push(matrix[i].join("\t"));
         }
 
@@ -62,7 +62,7 @@ var ViewModel = function() {
 
         var partialSum=0;
         for(var i=0; i<dimension; i++) {
-            partialSum+=parseFloat(matrix[currentLine][i]);
+            partialSum+=parseFloat(matrix[i][currentLine]);
             if(randomFloat <= partialSum) {
                 return i;
             }
@@ -92,7 +92,37 @@ var ViewModel = function() {
         self.initMatrix(matrix);
     };
 
+    self.resultVector = ko.computed(function() {
+        var occurence = self.occurrence();
+        var result=[];
+        for(var i=0; i<occurence.length; i++) {
+            result.push(ko.unwrap(occurence[i].distribution));
+        }
+        return result;
+    });
 
+    function vectorView(vector) {
+        var result = "{";
+        for(var i=0; i<vector.length-1; i++) {
+            result+=parseFloat(vector[i]).toFixed(3) + ",";
+        }
+        result+=parseFloat(vector[i]).toFixed(3) + "}";
+        return result;
+    }
+
+    function matrixView(matrix) {
+        var result = "{";
+        for(var i=0; i<matrix.length-1; i++) {
+            result+=vectorView(matrix[i]) + ",";
+        }
+        result+=vectorView(matrix[i]) + "}";
+        return result;
+    }
+
+    self.wolframView = ko.computed(function() {
+        var matrix = self.matrix();
+        return matrixView(matrix) + "   *   " + vectorView(ko.unwrap(self.resultVector));
+    });
 
 };
 
