@@ -55,7 +55,13 @@
                             </table>
                         </td>
                         <td><span class="smallsign">=</span></td>
-                        <td><span class="sign">?</span></td>
+                        <td>
+                            <table class="matrix" data-bind="foreach: multiplicationResult">
+                                <tr>
+                                    <td data-bind="text: $data"></td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </td>

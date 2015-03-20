@@ -73,10 +73,18 @@ var ViewModel = function() {
     self.next = function(cnt) {
         if(cnt==undefined) cnt=1;
         var currentLine = self.current()-1;
-        for(var i=0; i<cnt; i++) {
+        var i;
+        var occ  = [];
+        var occurrence = ko.unwrap(self.occurrence);
+        for(i=0; i<occurrence.length; i++) {
+            occ.push(ko.unwrap(occurrence[i].occurrence));
+        }
+        for(i=0; i<cnt; i++) {
             currentLine = calculateNext(currentLine);
-            var t = self.occurrence()[currentLine].occurrence;
-            t(ko.unwrap(t)+1);
+            occ[currentLine]++;
+        }
+        for(i=0; i<occurrence.length; i++) {
+            occurrence[i].occurrence(occ[i]);
         }
         self.current(currentLine+1);
         self.totalCount(ko.unwrap(self.totalCount)+cnt);
@@ -119,10 +127,33 @@ var ViewModel = function() {
         return result;
     }
 
+    function matrixVectorMultiplication(matrix, vector) {
+        var resultVector = [];
+        var dimension = matrix.length;
+        var i, j;
+        var cell;
+
+        for(i=0; i<dimension; i++) {
+            cell=0;
+            for(j=0; j<dimension; j++) {
+                cell+=parseFloat(matrix[i][j])*parseFloat(vector[j]);
+            }
+            resultVector.push(parseFloat(cell).toFixed(3));
+        }
+
+        return resultVector;
+    }
+
+    self.multiplicationResult = ko.computed(function() {
+       return matrixVectorMultiplication(ko.unwrap(self.matrix), ko.unwrap(self.resultVector));
+    });
+
     self.wolframView = ko.computed(function() {
         var matrix = self.matrix();
         return matrixView(matrix) + "   *   " + vectorView(ko.unwrap(self.resultVector));
     });
+
+
 
 };
 
