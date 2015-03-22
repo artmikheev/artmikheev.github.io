@@ -4,7 +4,7 @@
 
 
 var matrixTemplates = [
-    [[1]]
+    [[0.1, 0.3],[0.9, 0.7]]
 ]; // Need to update
 
 function OccurrenceModel(initialValue, total) {
