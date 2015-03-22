@@ -19,8 +19,8 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis tincidunt eleifend. Sed ex magna, volutpat in eleifend non, consequat quis tortor. Duis sodales quam quis efficitur dignissim. Proin molestie rhoncus sem, non tempor urna sollicitudin ut. Aliquam consectetur erat eu nisl rhoncus, eget pellentesque urna cursus. Donec ornare et leo ac rutrum.</p>
             <p>Cras congue ante eleifend eros fermentum consequat nec sodales justo. Nam semper odio et lacus consequat facilisis. Cras vitae justo est. Sed mollis at urna id porttitor. Sed semper ligula vitae lorem lobortis tempor. Integer ultrices facilisis eros, quis viverra sem. Aliquam eget rhoncus odio. Aenean faucibus erat nisi, pretium tristique libero mattis ut. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
         </div>
-
-        <div class="row">
+        <button class="btn btn-default" data-bind="text: toggleEditVisibilityText, click: toggleEditVisibility">.</button>
+        <div class="row" data-bind="visible: isEditVisible">
             <div class="col-md-4">
                 <label>Матрица вероятностей перехода</label>
                 <textarea class="editmatrix" data-bind="value: editmatrix"></textarea>

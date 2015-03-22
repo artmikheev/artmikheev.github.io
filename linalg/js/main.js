@@ -28,6 +28,8 @@ var ViewModel = function() {
     self.occurrence = ko.observableArray([]);
     self.editmatrix = ko.observable("");
     self.godmode = ko.observable(false);
+    self.isEditVisible = ko.observable(false);
+
     self.initMatrix = function(matrix) {
         self.matrix(matrix);
         self.current(1);
@@ -49,6 +51,18 @@ var ViewModel = function() {
 
     self.initMatrix(matrixTemplates[0]);
 
+    self.toggleEditVisibilityText = ko.computed(function() {
+       if(ko.unwrap(self.isEditVisible)) {
+           return "Спрятать";
+       }
+        else {
+           return "Задать матрицу";
+       }
+    });
+
+    self.toggleEditVisibility = function() {
+        self.isEditVisible(!ko.unwrap(self.isEditVisible));
+    };
 
     // calculate next row if now we in current
     var calculateNext = function(currentLine) {
