@@ -4,11 +4,7 @@
 
 
 var matrixTemplates = [
-    [
-        [0.1, 0.3, 0.6],
-        [0.3, 0.5, 0.2],
-        [0.6, 0.2, 0.2]
-    ]
+    [[1]]
 ]; // Need to update
 
 function OccurrenceModel(initialValue, total) {
@@ -31,7 +27,7 @@ var ViewModel = function() {
     self.totalCount = ko.observable(0);
     self.occurrence = ko.observableArray([]);
     self.editmatrix = ko.observable("");
-
+    self.godmode = ko.observable(false);
     self.initMatrix = function(matrix) {
         self.matrix(matrix);
         self.current(1);
@@ -152,6 +148,37 @@ var ViewModel = function() {
         var matrix = self.matrix();
         return matrixView(matrix) + "   *   " + vectorView(ko.unwrap(self.resultVector));
     });
+
+    var eggstatus=ko.observable(0);
+
+    self.egg1 = function() {
+        var s = ko.unwrap(eggstatus);
+        if(s==0) eggstatus(1);
+        else {
+            if(s==2) eggstatus(3);
+            else {
+                eggstatus(0);
+            }
+        }
+
+    };
+
+    self.egg2 = function() {
+        var s = ko.unwrap(eggstatus);
+        if(s==3) {
+            self.godmode(!ko.unwrap(self.godmode));
+        }
+        eggstatus(0);
+
+    };
+
+    self.egg3 = function() {
+        var s = ko.unwrap(eggstatus);
+        if(s==1) eggstatus(2);
+        else {
+            eggstatus(0);
+        }
+    };
 
 
 

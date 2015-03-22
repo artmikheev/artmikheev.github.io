@@ -4,40 +4,76 @@
     <meta charset="UTF-8">
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/knockout-3.2.0.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css" />
     <title>Matrix</title>
 </head>
 <body>
     <div class="container">
-        <div class="buttons">
-            <button data-bind="click: function() {$root.next(1);}">Next</button>
-            <button data-bind="click: function() {$root.next(20);}">Next [20]</button>
-            <button data-bind="click: function() {$root.next(50);}">Next [50]</button>
-            <button data-bind="click: function() {$root.next(200);}">Next [200]</button>
-            <button data-bind="click: function() {$root.next(5000);}">Next [5000]</button>
-        </div>
-        <div class="counters">
-            <span class="counter">current: <span data-bind="text: current"></span></span>
-            <span class="counter">total: <span data-bind="text: totalCount"></span></span>
+
+        <h1>Линейная алгебра</h1>
+        <div class="row intro">
+            <h3>Привет ;)</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis tincidunt eleifend. Sed ex magna, volutpat in eleifend non, consequat quis tortor. Duis sodales quam quis efficitur dignissim. Proin molestie rhoncus sem, non tempor urna sollicitudin ut. Aliquam consectetur erat eu nisl rhoncus, eget pellentesque urna cursus. Donec ornare et leo ac rutrum.</p>
+            <p>Cras congue ante eleifend eros fermentum consequat nec sodales justo. Nam semper odio et lacus consequat facilisis. Cras vitae justo est. Sed mollis at urna id porttitor. Sed semper ligula vitae lorem lobortis tempor. Integer ultrices facilisis eros, quis viverra sem. Aliquam eget rhoncus odio. Aenean faucibus erat nisi, pretium tristique libero mattis ut. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
         </div>
 
-    <table width="100%">
-        <tr>
-            <td>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Матрица вероятностей перехода</label>
+                <textarea class="editmatrix" data-bind="value: editmatrix"></textarea>
+            </div>
+            <div class="col-md-8" id="rereadDiv">
+                <button  type="button" class="btn btn-default"  data-bind="click: readMatrix">Пересчитать матрицу</button>
+                <div>
+                    <p>А тут какой-то текст о формате.</p>
+                </div>
+                <div data-bind="if: godmode">
+                    <div data-bind="text: wolframView"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="buttons">
+                <button type="button" class="btn btn-default" data-bind="click: function() {$root.next(1);}">Переход</button>
+                <button type="button" class="btn btn-default" data-bind="click: function() {$root.next(20);}">Переход [20]</button>
+                <button type="button" class="btn btn-default" data-bind="click: function() {$root.next(100);}">Переход [100]</button>
+                <button type="button" class="btn btn-default" data-bind="click: function() {$root.next(1000);}">Переход [1000]</button>
+            </div>
+        </div>
+        <div class="counters">
+            <span class="counter">Текущая страница: <span data-bind="text: current"></span></span>
+            <span class="counter">Всего переходов: <span data-bind="text: totalCount"></span></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4" id="matrix">
                 <table class="matrix" data-bind="foreach: matrix">
                     <tr data-bind="foreach: $data">
                         <td data-bind="text: $data"></td>
                     </tr>
                 </table>
-
-
-                <table class="vecttable" data-bind="foreach: occurrence">
-                    <tr><td data-bind="text: $index()+1"></td><td data-bind="text: occurrence"></td><td data-bind="text: distribution"></td></tr>
+                <label>Матрица вероятностей перехода</label>
+            </div>
+            <div class="col-md-8">
+                <table class="vecttable">
+                    <thead>
+                        <th>Страница</th>
+                        <th>Посещения</th>
+                        <th>Ранг</th>
+                    </thead>
+                    <tbody data-bind="foreach: occurrence">
+                        <tr><td data-bind="text: $index()+1"></td><td data-bind="text: occurrence"></td><td data-bind="text: distribution"></td></tr>
+                    </tbody>
                 </table>
-            </td>
-            <td class="right" align="right">
-                <table style="float: right">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="multiplication">
+                <table>
                     <tr>
                         <td>
                             <table class="matrix" data-bind="foreach: matrix">
@@ -56,20 +92,21 @@
                         </td>
                         <td><span class="smallsign">=</span></td>
                         <td>
-                            <table class="matrix" data-bind="foreach: multiplicationResult">
-                                <tr>
-                                    <td data-bind="text: $data"></td>
-                                </tr>
-                            </table>
+                            <div data-bind="if: godmode">
+                                <table class="matrix" data-bind="foreach: multiplicationResult">
+                                    <tr>
+                                        <td data-bind="text: $data"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <span data-bind="ifnot: godmode" class="sign">?</span>
                         </td>
                     </tr>
                 </table>
-            </td>
-        </tr>
-    </table>
-        <label><textarea class="editmatrix" data-bind="value: editmatrix"></textarea></label><br />
-        <button data-bind="click: readMatrix">Update</button>
-        <span data-bind="text: wolframView"></span>
+            </div>
+        </div>
+            </div>
     </div>
+    <footer class="footer"><span data-bind="click: egg1">artmikheev</span>.<span data-bind="click: egg2">github</span>.<span data-bind="click: egg3">io</span></footer>
 </body>
 </html>
