@@ -13,22 +13,24 @@
 <body>
     <div class="container">
 
-        <h1>Линейная алгебра</h1>
+        <h1>Ранжирование страниц</h1>
         <div class="row intro">
-            <h3>Привет ;)</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis tincidunt eleifend. Sed ex magna, volutpat in eleifend non, consequat quis tortor. Duis sodales quam quis efficitur dignissim. Proin molestie rhoncus sem, non tempor urna sollicitudin ut. Aliquam consectetur erat eu nisl rhoncus, eget pellentesque urna cursus. Donec ornare et leo ac rutrum.</p>
-            <p>Cras congue ante eleifend eros fermentum consequat nec sodales justo. Nam semper odio et lacus consequat facilisis. Cras vitae justo est. Sed mollis at urna id porttitor. Sed semper ligula vitae lorem lobortis tempor. Integer ultrices facilisis eros, quis viverra sem. Aliquam eget rhoncus odio. Aenean faucibus erat nisi, pretium tristique libero mattis ut. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+            <p>В выпадающем окне нужно ввести матрицу.</p>
+            <p>Далее можно нажимать на кнопки "Переход[n]", которые означают, что мы сделаем <code>n</code> переходов согласно введённой матрице вероятностей переходов.</p>
+                <p>В таблице видно сколько переходов было соверешено на каждую из страниц и вектор рангов.</p>
+                <p>Остаётся только проверить, что получающийся вектор - собственный с собственным значением 1.</p>
         </div>
         <button class="btn btn-default" data-bind="text: toggleEditVisibilityText, click: toggleEditVisibility">.</button>
         <div class="row" data-bind="visible: isEditVisible">
             <div class="col-md-4">
-                <label>Матрица вероятностей перехода</label>
+                <label>Матрица</label>
                 <textarea class="editmatrix" data-bind="value: editmatrix"></textarea>
             </div>
             <div class="col-md-8" id="rereadDiv">
                 <button  type="button" class="btn btn-default"  data-bind="click: readMatrix">Пересчитать матрицу</button>
                 <div>
-                    <p>А тут какой-то текст о формате.</p>
+                    <p>Элементами матрицы могут быть десятичные дроби у которых целая и дробная часть разделены точкой. Элементы одной строки матрицы разделяются любым количеством пробелов. Разные строки матрицы нужно записывать в разных строках выпадающего окна.
+                        Также напомним, что сумма элементов каждого столбца должна быть равна 1 (при этом сумма элементов строки не может быть равна 1).</p>
                 </div>
                 <div data-bind="if: godmode">
                     <div data-bind="text: wolframView"></div>
@@ -50,15 +52,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4" id="matrix">
-                <table class="matrix" data-bind="foreach: matrix">
-                    <tr data-bind="foreach: $data">
-                        <td data-bind="text: $data"></td>
-                    </tr>
-                </table>
-                <label>Матрица вероятностей перехода</label>
-            </div>
-            <div class="col-md-8">
+            <div class="col-md-8 col-md-offset-4">
                 <table class="vecttable">
                     <thead>
                         <th>Страница</th>
