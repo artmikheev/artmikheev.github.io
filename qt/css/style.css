@@ -1,0 +1,88 @@
+body {
+	background: #ddd;
+}
+
+div.container {
+	max-width: 960px;
+	background: #fff;
+	border-radius: 0px 0px 10px 10px;
+	margin-bottom: 10px;
+}
+
+term {
+  font-weight: bold;
+  font-family: monospace;
+}
+
+p.note {
+	padding: 10px;
+	border-radius: 5px;
+}
+
+table.codetable {
+	width: 100%;
+	background: #f9f9f9;
+	border-radius: 5px;
+	margin-bottom: 20px;
+}
+
+table.codetable tr td{
+	padding: 10px;
+}
+
+table.codetable td.files {
+	width: 200px;
+	vertical-align: top;
+}
+
+table.codetable td.files ul li {
+	list-style: none;
+}
+
+table.codetable td.files ul li a.selected {
+	cursor: default;
+	color: black;
+}
+
+
+table.codetable td.files ul {
+	margin: 0px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-left: 3px solid #005;
+	padding: 0px;
+	padding-left: 5px;
+	background: #f5f5f5;
+	border-radius: 5px;
+	height: 300px;
+	overflow: auto;
+	display: block;
+	
+
+}
+
+table.codetable td.files ul li a {
+	cursor: pointer;
+}
+
+table.codetable pre {
+	max-height: 300px;
+	overflow: auto;
+}
+
+table.codetable td.contents {
+	vertical-align: top;
+}
+
+table.codetable td.contents div.content.selected {
+	display: block;
+}
+
+table.codetable td.contents div.content {
+	display: none;
+}
+
+h3 {
+	margin-top: 60px;
+}

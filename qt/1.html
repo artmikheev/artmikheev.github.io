@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	
+	<link rel="stylesheet" href="extra/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="extra/highlightjs/styles/github.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="extra/jquery-1.11.2.min.js"></script>
+	<script src="extra/bootstrap/js/bootstrap.min.js"></script>
+	<script src="extra/highlightjs/highlight.pack.js"></script>
+	<script src="js/codetable.js"></script>
+	
+	<script src="js/app.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<title>Qt. </title>
+</head>
+<body>
+<div class="container">
+	<h1>Qt.</h1>
+
+	<h2>Оглавление</h2>
+	<ul id="tableofcontents">
+		
+	</ul>
+	
+	<h3>Hello world</h3>
+	<div>
+		<p>Простейший код с использованием графики из <term>Qt</term>:</p>
+		
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">
+<pre><code class="cpp">#include &lt;QtGui&gt;
+#include &lt;QApplication&gt;
+#include &lt;QLabel&gt;
+int main(int argc, char* argv[]) {
+	QApplication app(argc, argv);
+	QLabel label("Hello world!");
+	label.show();
+	return app.exec();
+}</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/helloworld.png" /></div></div>
+</td></tr></table>
+
+	<p><code>QApplication</code> &mdash; объект (существующий в единственном экземпляре во всей программе), в котором происходит инициализация параметров <term>Qt</term>. Это объект управляет всеми происходящими событиями (перепосылает другим объектам).</p>
+	<p><code>return app.exec();</code> &mdash; запустить цикл обработки событий. То есть передать уравление программой <term>Qt</term>.</p>
+	<p><code>QLabel</code> &mdash; текст. Метод <term>show</term> вызывается для отображения графического окна.</p>
+	<p>Результат программы - появляется маленькое окошко с надписью "Hello world".</p>
+	
+	<p class="note bg-warning">Если не вызывать app.exec - окно создастся, но будет пустое, так как событие "нарисовать содержимое" будет проигнорировано.</p>
+	</div>
+
+	<h3>А если я хочу два текста в одном окне?</h3>
+	<div>
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">
+<pre><code class="cpp">#include &lt;QtGui&gt;
+#include &lt;QApplication&gt;
+#include &lt;QVBoxLayout&gt;
+#include &lt;QLabel&gt;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    QWidget window;
+    QVBoxLayout layout;
+    QLabel label1(&quot;Hello!&quot;);
+    QLabel label2(&quot;World!&quot;);
+
+    window.setLayout(&amp;layout);
+    layout.addWidget(&amp;label1);
+    layout.addWidget(&amp;label2);
+
+    window.show();
+    return app.exec();
+}</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/doubleword.png" /></div></div>
+</td></tr></table>
+	
+	<p>Что нового? <code>QWidget</code>, <code>QVBoxLayout</code>.</p>
+	<p><code>QWidget</code> &mdash; базовый класс для всех графических элементов (виджетов) <term>Qt</term>. Т.е. QLabel унаследован от QWidget. Каждый виджет может отображаться как в отдельном окне, так и внутри другого виджета.</p>
+	<p><code>QVBoxLayout</code>. Если мы хотим разместить 2 элемента в одном окне, надо вначале решить, как они будут размещаться: "один под другим", "один справа от другого", "в ячейках таблицы", &hellip;;</p>
+	<p><code>QVBoxLayout</code> (V - vertical) означает "один под другим" &mdash; некий контейнер, в который можно добавлять элементы и он будет размещать их один под другим. Элементы добавляются через метод <term>addWidget(QWidget*)</term></p>
+	<p>В данном примере мы содаём виджет-окно и устанавливаем в него контейнер с элементами [<var>label1</var>, <var>label2</var>].</p>
+	</div>
+	
+		<h3>А как совместить вертикальный контейнер и горизонтальный?</h3>
+	<div>
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">
+<pre><code class="cpp">#include &lt;QtGui&gt;
+#include &lt;QApplication&gt;
+#include &lt;QVBoxLayout&gt;
+#include &lt;QHBoxLayout&gt;
+#include &lt;QLabel&gt;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    QWidget window;
+    QVBoxLayout layout;
+    QHBoxLayout otherLayout;
+
+    QLabel label1(&quot;Hello!&quot;);
+    QLabel label2(&quot;World!&quot;);
+    QLabel label3(&quot;something&quot;);
+    QLabel label4(&quot;for test&quot;);
+
+    window.setLayout(&amp;layout);
+
+    otherLayout.addWidget(&amp;label3);
+    otherLayout.addWidget(&amp;label4);
+
+    layout.addWidget(&amp;label1);
+    layout.addWidget(&amp;label2);
+
+    layout.addLayout(&amp;otherLayout);
+    window.show();
+    return app.exec();
+}
+</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/doublelayout.png" /></div></div>
+</td></tr></table>
+	
+	<p>Методом <term>addLayout</term> можно добавлять контейнеры в контейнер так же как и виджеты.</p>
+	</div>
+	
+	<h3>А какие ещё бывают контейнеры?</h3>
+	<div>
+		<p>У <term>Qt</term> отличная документация! <a href="http://doc.qt.io/qt-5/qlayout.html" target="_BLANK">QLayout</a> (смотри унаследованные от него классы  [<b>inherited by</b>], а так же унаследованные от них классы)</p>
+	</div>
+	
+	<h3>Сигналы и слоты</h3>
+	<div>
+		<p>В консольном приложении можно попросить пользотеля ввести текст и ждать. В графическом приложении это не так. Пользователь может хотеть иметь возможность выбирать что он хочет </p>
+		<p>В графическом приложении возникают события. Например, пользователь нажал кнопку, пользователь нажал кнопку на клавиатуре, изменился размер окна, &hellip;;</p>
+		<p>События нужно как-то обрабатывать. В <term>Qt</term> для этого есть удобный механизм сигналов и слотов.</p>
+		
+		<p>У объекта есть набор событий, которые он может создавать. События кнопки:</p>
+		<ul>
+			<li>Кнопка нажата</li>
+			<li>Кнопка отпущена</li>
+			<li>Кнопка кликнута &mdash; например, если нажать на кнопку, а потом, не отпуская, передвинуть курсор мыши за пределы кнопки и отпустить &mdash; событие не вызовется.</li>
+		</ul>
+		
+		<p>Так же есть набор методов, которые могут обрабатывать какие-то события. Например, хотим чтобы в консоль выводилась информация о нажатии на кнопку. Нужны обработчики:</p>
+		<ul>
+			<li>Обработать нажатие кнопки</li>
+			<li>Обработать отпускание кнопки</li>
+			<li>Обработать клик по кнопке</li>
+		</ul>
+		
+		<p>В <term>Qt</term> события, которые объект может создавать называются <term>сигналами</term>, а методы-обработчиками &mdash; <term>слотами</term>.</p>
+		<p>Сигналы и слоты можно соединять между собой с помощью функции <code>QObject::connect</code>.</p>
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="logger.h">logger.h</a></li>
+		<li><a data-file="logger.cpp">logger.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">		
+<pre><code class="cpp">#include &lt;QApplication&gt;
+#include &lt;QtGui&gt;
+#include &lt;QPushButton&gt;
+#include &quot;logger.h&quot;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    QPushButton button(&quot;Press me!&quot;);
+    ButtonLogger logger;
+
+    QObject::connect(&amp;button, SIGNAL(pressed()), &amp;logger, SLOT(handlePress()));
+    QObject::connect(&amp;button, SIGNAL(released()), &amp;logger, SLOT(handleRelease()));
+    QObject::connect(&amp;button, SIGNAL(clicked()), &amp;logger, SLOT(handleClick()));
+
+    button.show();
+    return app.exec();
+}</code></pre></div>
+<div class="content" data-file="logger.h">		
+<pre><code class="cpp">#ifndef LOGGER_H
+#define LOGGER_H
+
+#include &lt;QObject&gt;
+#include &lt;QDebug&gt;
+
+class ButtonLogger : public QObject
+{
+    Q_OBJECT
+public:
+    ButtonLogger(QObject *parent = 0) : QObject(parent) {}
+    ~ButtonLogger() {}
+public slots:
+    void handlePress();
+    void handleRelease();
+    void handleClick();
+};
+
+#endif // LOGGER_H</code></pre></div>
+<div class="content" data-file="logger.cpp">		
+<pre><code class="cpp">#include &quot;logger.h&quot;
+
+void ButtonLogger::handlePress() {
+    qDebug() &lt;&lt; &quot;handlePress called&quot;;
+}
+
+void ButtonLogger::handleRelease() {
+    qDebug() &lt;&lt; &quot;handleRelease called&quot;;
+}
+
+void ButtonLogger::handleClick() {
+    qDebug() &lt;&lt; &quot;handleClick called&quot;;
+}</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/simplelogger.png" /></div></div>
+</td></tr></table>
+
+<p class="note bg-warning">Сигналы могут связываться и с несколькими слотами разных объектов. Даже могут связывться нескоклько раз с одим и тем же слотом одного и того же объекта (но не нужно так делать).</p>
+		
+	</div>
+		
+	<h3>Аа-а.. Почему это компилируется?</h3>
+	<div>
+		<p>Код c использованием <term>Qt</term> чаще всего нельзя просто скомпилировать компилятором, указав набор флагов для линковки, так как там используется некий диалект <term>C++</term>, который компиляторы не понимают.</p>
+		<p>Например, в <term>C++</term> нет такого понятия, как <code>slot</code>.</p>
+		<p>Поэтому перед компиляцией компилятором происходит &laquo;перевод с диалекта на обычный <term>C++</term>&raquo;</p>
+		<p>Переводом занимается штука, которая называется <term>MOC</term> (Meta Object Compiller). Она ищет в классах макрос Q_OBJECT и создаёт для них дополнительный файл, который включается в сборку.</p>
+	</div>
+	
+	<h3>Объекты в Qt</h3>
+	<div>
+		<p>Все объекты в <term>Qt</term> унаследованны от <code>QObject</code>, который позволяет использовать механизм слотов.</p>
+		<p>Все графические объекты унаследованы от <code>QWidget</code> (который в свою очередь от <code>QObject</code>). </p>
+	</div>
+	
+	<h3>Создание собственных виджетов</h3>
+	<div>
+		<p>Можно создавать свои виджеты. Например, мы хотим создать форму для ввода состоящую из текста, поля и кнопки.</p>
+		
+<table class="codetable"><tr>
+<td class="files"><ul>
+	<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+	<li><a data-file="inputbox.h">inputbox.h</a></li>
+	<li><a data-file="logger.h">logger.h</a></li>
+	<li><a data-file="inputbox.cpp">inputbox.cpp</a></li>
+	<li><a data-file="logger.cpp">logger.cpp</a></li>
+	<li><a data-file="screen.png">скриншот</a></li>
+</ul></td>
+<td class="contents">
+<div class="content" data-file="main.cpp">		
+<pre><code class="cpp">#include &lt;QApplication&gt;
+#include &lt;QtGui&gt;
+#include &quot;logger.h&quot;
+#include &quot;inputbox.h&quot;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+
+    TextLogger logger;
+    InputBox mybox(&quot;&#1042;&#1074;&#1077;&#1076;&#1080; &#1095;&#1090;&#1086;-&#1090;&#1086;&quot;);
+    QObject::connect(&amp;mybox, SIGNAL(textSubmited(QString)), &amp;logger, SLOT(handleText(QString)));
+
+    mybox.show();
+    return app.exec();
+}</code></pre></div>
+<div class="content" data-file="inputbox.h">		
+<pre><code class="cpp">#ifndef INPUTBOX_H
+#define INPUTBOX_H
+
+#include &lt;QWidget&gt;
+#include &lt;QLabel&gt;
+#include &lt;QLineEdit&gt;
+#include &lt;QPushButton&gt;
+#include &lt;QHBoxLayout&gt;
+
+class InputBox : public QWidget
+{
+    Q_OBJECT
+private:
+    QLabel *label;
+    QLineEdit *input;
+    QPushButton *button;
+    QHBoxLayout *hlayout;
+public:
+    explicit InputBox(QString labelText, QWidget *parent = 0);
+    ~InputBox();
+private slots:
+    void submitText();
+signals:
+    void textSubmited(QString text);
+};
+
+#endif // INPUTBOX_H</code></pre></div>
+<div class="content" data-file="logger.h">		
+<pre><code class="cpp">#ifndef LOGGER_H
+#define LOGGER_H
+
+#include &lt;QObject&gt;
+#include &lt;QDebug&gt;
+
+class TextLogger : public QObject
+{
+    Q_OBJECT
+public:
+    TextLogger(QObject *parent = 0) : QObject(parent) {}
+    ~TextLogger() {}
+public slots:
+    void handleText(const QString);
+};
+
+#endif // LOGGER_H</code></pre></div>
+<div class="content" data-file="inputbox.cpp">		
+<pre><code class="cpp">#include &quot;inputbox.h&quot;
+
+InputBox::InputBox(QString labelText, QWidget *parent) : QWidget(parent)
+{
+    label = new QLabel(labelText);
+    input = new QLineEdit();
+    button = new QPushButton(&quot;Press me!&quot;);
+    hlayout = new QHBoxLayout();
+
+    this-&gt;setLayout(hlayout);
+    hlayout-&gt;addWidget(label);
+    hlayout-&gt;addWidget(input);
+    hlayout-&gt;addWidget(button);
+
+    connect(input, SIGNAL(returnPressed()), this, SLOT(submitText()));
+    connect(button, SIGNAL(clicked()), this, SLOT(submitText()));
+}
+
+InputBox::~InputBox()
+{
+    delete label;
+    delete input;
+    delete button;
+    delete hlayout;
+}
+
+void InputBox::submitText() {
+    emit textSubmited(input-&gt;text()); // generate event
+    input-&gt;setText(&quot;&quot;); // clear text field
+}</code></pre></div>
+<div class="content" data-file="logger.cpp">		
+<pre><code class="cpp">#include &quot;logger.h&quot;
+
+void TextLogger::handleText(const QString text) {
+    qDebug() &lt;&lt; &quot;text handled: &quot; &lt;&lt; text;
+}</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/inputbox.png" /></div></div>
+</td></tr></table>
+	</div>
+
+	<h3>Хочу рисовать!</h3>
+	<div>
+		<p>У виджетов можно переопределить метод, который его рисует.</p>
+		<p>Можно сделать виджет по которому можно рисовать мышкой:</p>
+		
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="paintwidget.h">paintwidget.h</a></li>
+		<li><a data-file="paintwidget.cpp">paintwidget.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">		
+<pre><code class="cpp">#include &lt;QApplication&gt;
+#include &lt;QtGui&gt;
+#include &quot;paintwidget.h&quot;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+
+    PaintWidget mypaint;
+    mypaint.show();
+    return app.exec();
+}</code></pre></div>
+<div class="content" data-file="paintwidget.h">		
+<pre><code class="cpp">#ifndef PAINTWIDGET_H
+#define PAINTWIDGET_H
+
+#include &lt;QWidget&gt;
+#include &lt;QPainter&gt;
+#include &lt;QMouseEvent&gt;
+
+class PaintWidget : public QWidget
+{
+    Q_OBJECT
+private:
+    bool pixels[1000][1000];
+public:
+    explicit PaintWidget(QWidget *parent = 0);
+    ~PaintWidget();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent ( QMouseEvent * event );
+signals:
+
+public slots:
+};
+
+#endif // PAINTWIDGET_H</code></pre></div>
+<div class="content" data-file="paintwidget.cpp">		
+<pre><code class="cpp">#include &quot;paintwidget.h&quot;
+
+PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent)
+{
+    //init pixels
+    for(int i=0; i&lt;1000; ++i)
+        for(int j=0; j&lt;1000; ++j)
+            pixels[i][j]=false;
+}
+
+PaintWidget::~PaintWidget()
+{
+
+}
+
+void PaintWidget::mouseMoveEvent ( QMouseEvent * event ) {
+    // if left button pressed
+    int x, y;
+    x=event-&gt;x();
+    y=event-&gt;y();
+    if(x&lt;0||x&gt;=1000) return;
+    if(y&lt;0||y&gt;=1000) return;
+    if(event-&gt;buttons() &amp; Qt::LeftButton) {
+        pixels[x][y]=true;
+        update();
+    }
+}
+
+void PaintWidget::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+
+    int width = size().width();
+    int height = size().height();
+
+    if(width&gt;1000) width=1000;
+    if(height&gt;1000) height=1000;
+
+    painter.fillRect(0, 0, width, height, QColor(255,255,255));
+
+    QPen pen(Qt::green);
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setWidth(6);
+    painter.setPen(pen);
+
+    for(int i=0; i&lt;width; ++i)
+        for(int j=0; j&lt;height; ++j) {
+            if(pixels[i][j]) painter.drawPoint(i, j);
+        }
+}</code></pre></div>
+<div class="content" data-file="screen.png"><div class="screenshot"><img src="imgs/paint.png" /></div></div>
+</td></tr></table>		
+	<p>QPainter может рисовать не только точки. В <term>IDE</term> (например, в <term>QtCreator</term>) есть автодополнение и можно посмотреть какие методы есть у <term>QPainter</term>.</p>
+	
+	<p>Либо можно посмотреть в замечательной документации: <a href="http://doc.qt.io/qt-5/qpainter.html" target=_BLANK>QPainter</a>.</p>
+	</div>
+
+	<h3>А дальше...</h3>
+	<div>
+		<p>А сделай окно с кнопкой и виджетом для рисования. При нажатии на кнопку всё нарисованное должно очищаться.</p>
+	</div>
+
+</div>
+</body>
+</html>
+<!--
+
+<table class="codetable"><tr>
+	<td class="files"><ul>
+		<li><a data-file="main.cpp" class="selected">main.cpp</a></li>
+		<li><a data-file="screen.png">скриншот</a></li>
+	</ul></td>
+	<td class="contents">
+<div class="content" data-file="main.cpp">		
+<pre><code class="cpp">
+</code></pre></div>
+<div class="content" data-file="screen.png">test</div>
+</td></tr></table>
